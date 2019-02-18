@@ -1,18 +1,34 @@
 --- # Golang Installation
 - hosts: 127.0.0.1
   connection: local
-  become: true
   tasks:
   - name: Install Golang
+    become: true
     dnf:
       name: golang
       state: latest
   - name: Create go directory
     file:
-      path: "{{ sysuser }}/go"
+      path: "{{ ansible_user_id }}/go"
       state: directory
-      owner: "{{ sysuser }}"
-      group: "{{ sysuser }}"
+      owner: "{{ ansible_user_id }}"
+      group: "{{ ansible_user_id }}"
       mode: 0755
-
-  
+  - name: Export to .bashrc
+    blockinfile:
+      path: "{{ ansible_user_dir }}/.bashrc"
+      block: |
+        export GOPATH=$HOME/go
+        export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
+      backup: true
+      insertafter: EOF
+    when: ("{{ ansible_user_shell }}" == "/bin/bash")
+  - name: Export to .zshrc
+    blockinfile:
+      path: "{{ ansible_user_dir }}/.bashrc"
+      block: |
+        export GOPATH=$HOME/go
+        export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
+      backup: true
+      insertafter: EOF
+    when: ("{{ ansible_user_shell }}" == "/bin/zsh")
