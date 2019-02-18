@@ -1,0 +1,18 @@
+--- # Golang Installation
+- hosts: 127.0.0.1
+  connection: local
+  become: true
+  tasks:
+  - name: Install Golang
+    dnf:
+      name: golang
+      state: latest
+  - name: Create go directory
+    file:
+      path: "{{ sysuser }}/go"
+      state: directory
+      owner: "{{ sysuser }}"
+      group: "{{ sysuser }}"
+      mode: 0755
+
+  
