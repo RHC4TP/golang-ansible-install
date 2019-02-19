@@ -7,13 +7,19 @@
     dnf:
       name: golang
       state: latest
-  - name: Create go directory
+      update_cache: yes
+  - name: Create go dirs and subdirs
     file:
-      path: "{{ ansible_user_dir }}/go"
+      path: "{{ item }}"
       state: directory
       owner: "{{ ansible_user_id }}"
       group: "{{ ansible_user_id }}"
-      mode: 0755
+      mode: 0775
+    with_items:
+      - "{{ ansible_user_dir }}/go"
+      - "{{ ansible_user_dir }}/go/bin"
+      - "{{ ansible_user_dir }}/go/src"
+      - "{{ ansible_user_dir }}/go/pkg"
   - name: Export to .bashrc
     blockinfile:
       path: "{{ ansible_user_dir }}/.bashrc"
