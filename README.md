@@ -12,7 +12,7 @@ Most modern languages can easily be installed via a package manager with no furt
 
 Ansible must be installed on your local machine. Once installed, just clone this repo and run the command below:
 
-** IMPORTANT: ** do not run playbook as `root` user.
+**IMPORTANT:** do not run playbook as `root` user.
 
 `$ ansible-playbook main.yml`
 

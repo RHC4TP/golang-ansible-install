@@ -1,13 +1,17 @@
 --- # Golang Installation
 - hosts: 127.0.0.1
   connection: local
+  vars:
+    post_install: Don't forget to reload your your shell with source ~/.bashrc or source ~/.zshrc
   tasks:
+
   - name: Install Golang
     become: true
     dnf:
       name: golang
       state: latest
       update_cache: yes
+
   - name: Create go dirs and subdirs
     file:
       path: "{{ item }}"
@@ -20,6 +24,7 @@
       - "{{ ansible_user_dir }}/go/bin"
       - "{{ ansible_user_dir }}/go/src"
       - "{{ ansible_user_dir }}/go/pkg"
+
   - name: Export to .bashrc
     blockinfile:
       path: "{{ ansible_user_dir }}/.bashrc"
@@ -29,6 +34,7 @@
       backup: true
       insertafter: EOF
     when: ansible_facts['user_shell'] == "/bin/bash"
+
   - name: Export to .zshrc
     blockinfile:
       path: "{{ ansible_user_dir }}/.bashrc"
@@ -38,3 +44,6 @@
       backup: true
       insertafter: EOF
     when: ansible_facts['user_shell'] == "/bin/zsh"
+
+  - name: Display post install message
+    debug: msg={{ post_install }}
